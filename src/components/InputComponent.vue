@@ -1,0 +1,150 @@
+<template lang="pug">
+.input
+  span.input-title {{ title}}
+  .input-wrapper
+    input.input-field(
+      v-model="value"
+      :maxlength="maxInputLength"
+      :type="getInputType"
+      :placeholder="placeholder"
+      )
+    EyeOn(@click="toggleShowPassword(true)").input-icon.eye-on(v-if="inputType==='password' && !isVisible")
+    EyeOff(@click="toggleShowPassword(false)").input-icon.eye-off(v-if="inputType==='password' && isVisible")
+  div.input-bottom(v-if="maxInputLength || !isValid")
+    span.input-error(v-if="!isValid") {{ errorMessage }}
+    span.input-counter(v-if="maxInputLength") {{getInputLength}}/{{ maxInputLength }}
+</template>
+
+<script>
+import EyeOn from '@/assets/eye-on.svg'
+import EyeOff from '@/assets/eye-off.svg'
+
+export default {
+  props: {
+    title: {
+      type: String,
+      default: 'Введите значение'
+    },
+    placeholder: {
+      type: String,
+      default: 'Введите значение'
+    },
+    errorMessage: {
+      type: String,
+      default: 'Не правильно заполненные данные'
+    },
+    inputType: {
+      type: String,
+      default: 'text'
+    },
+    maxInputLength: {
+      type: Number
+    }
+  },
+  components: {
+    EyeOn,
+    EyeOff
+  },
+  data () {
+    return {
+      value: '',
+      isVisible: false
+    }
+  },
+  computed: {
+    getInputType () {
+      return this.inputType === 'password'
+        ? this.isVisible ? 'text' : 'password'
+        : 'text'
+    },
+    getInputLength () {
+      return this.value.length
+    },
+    isValid () {
+      return true
+    }
+  },
+  methods: {
+    toggleShowPassword (value) {
+      this.isVisible = value
+    }
+  }
+}
+</script>
+
+<style lang="scss">
+.input {
+  display: flex;
+  flex-direction: column;
+  width: inherit;
+
+  font-size: 18px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 28px;
+
+  &-title {
+    margin-bottom: 8px;
+    padding: 0 24px;
+    color: var(--gray);
+  }
+  &-wrapper {
+    position: relative;
+    width: 100%;
+  }
+  &-field {
+    max-height: 72px;
+    max-width: 100%;
+    width: -webkit-fill-available;
+    padding: 22px 60px;
+    color: var(--dark);
+
+    font-family: 'Montserrat' serif;
+    font-size: 18px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 28px;
+
+    border: 2px solid transparent;
+    border-radius: 36px;
+    overflow: hidden;
+    outline: none;
+
+    transition: border-color ease 0.2s;
+
+    &::placeholder {
+      color: var(--gray)
+    }
+    &:hover, &:focus {
+      border-color: var(--green-light);
+      transition: border-color ease 0.2s;
+    }
+  }
+  &-icon {
+    position: absolute;
+    top: 50%;
+    color: var(--green-light);
+    transform: translateY(-50%);
+
+    &.eye-on{
+      right: 28px;
+    }
+    &.eye-off{
+      right: 40px;
+    }
+  }
+  &-bottom {
+    display: flex;
+    justify-content: space-between;
+    padding: 0 24px;
+    margin-top: 8px;
+
+  }
+  &-error {
+    color: var(--red);
+  }
+  &-counter {
+    margin-left: auto;
+  }
+}
+</style>
