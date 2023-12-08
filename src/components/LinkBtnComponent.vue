@@ -1,14 +1,10 @@
 <template lang="pug">
-a.link-btn
+a.link-btn.text-small-bold(@click.prevent="$emit('action')")
   slot
 </template>
 
 <style lang="scss">
 .link-btn{
-  font-size: 18px;
-  font-style: normal;
-  font-weight: 700;
-  line-height: 28px;
   color: var(--green-light);
   cursor: pointer;
   transition: color ease 0.2s;

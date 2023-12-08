@@ -1,11 +1,10 @@
 <template lang="pug">
 .header
-  router-link(to="/")
-    Logo.header-logo
-  BtnComponent.header-btn(v-if="!isAuth")
-    Login.header-btn__icon(@click="")
+  Logo.header-logo
+  BtnComponent.header-btn( v-if="!isAuth" @action="openPopup('login')")
+    Login.header-btn__icon
     | Войти
-  User.header-user(v-if="isAuth")
+  User.header-user(v-if="isAuth" :user-name="isAuth")
 </template>
 
 <script>
@@ -23,9 +22,14 @@ export default {
     BtnComponent,
     User
   },
-  data () {
-    return {
-      isAuth: false
+  computed: {
+    isAuth () {
+      return this.$store.getters.authUser.email
+    }
+  },
+  methods: {
+    openPopup (type) {
+      this.$store.dispatch('setIsPopupOpen', { type, status: true })
     }
   }
 }
@@ -33,8 +37,14 @@ export default {
 
 <style lang="scss">
 .header {
+  position: sticky;
   display: flex;
   justify-content: space-between;
+  max-width: 1600px;
+  width: 100%;
+  padding: 40px 0;
+  z-index: 100;
+  background-color: var(--dark);
 
   &-logo {
     color: #B1C909;
@@ -45,7 +55,6 @@ export default {
   &-user {
     position: relative;
   }
-
 }
 
 </style>

@@ -1,11 +1,11 @@
 <template lang="pug">
-.user
-  span.user-name protest_the_hero@mail.ru
+.user.text-small
+  span.user-name {{ userName }}
   .user-avatar
     Icon(@click="isLogoutVisible = !isLogoutVisible")
   Logout.user-logout(
     v-if="isLogoutVisible"
-    @logout="logout()"
+    @action="onLogout()"
     )
 
 </template>
@@ -13,11 +13,15 @@
 <script>
 import Icon from '@/assets/user.svg'
 import Logout from '@/components/LogoutComponent.vue'
+import { logout } from '@/methods/userApiMethods.js'
 
 export default {
   components: {
     Logout,
     Icon
+  },
+  props: {
+    userName: String
   },
   data () {
     return {
@@ -25,8 +29,10 @@ export default {
     }
   },
   methods: {
-    logout () {
+    onLogout () {
       this.isLogoutVisible = !this.isLogoutVisible
+      logout()
+      this.$router.push('/')
     }
   }
 }
@@ -37,10 +43,7 @@ export default {
   position: relative;
   display: flex;
   align-items: center;
-  font-size: 18px;
-  font-style: normal;
-  font-weight: 400;
-  line-height: 28px;
+
   &-name {
     margin-right: 12px;
   }
@@ -60,7 +63,7 @@ export default {
     position: absolute;
     top: 78px;
     right: 0;
-    z-index: 10;
+    z-index: 20;
   }
 }
 </style>

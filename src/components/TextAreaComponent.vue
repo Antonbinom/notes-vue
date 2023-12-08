@@ -1,14 +1,15 @@
 <template lang="pug">
-.input
+.input.text-small
   span.input-title {{ title }}
   .input-wrapper
-    textarea.input-field(
-      v-model="value"
+    textarea.input-field.text-small(
+      :value="inputValue"
+      @input="handleInput"
       :maxlength="maxInputLength"
       type="text"
       :placeholder="placeholder")
   div.input-bottom(v-if="maxInputLength || !isValid")
-    span.input-error(v-if="!isValid") {{ errorMessage }}
+    span.input-error(v-if="errorMessage") {{ errorMessage }}
     span.input-counter {{getInputLength}}/{{ maxInputLength }}
 </template>
 
@@ -23,29 +24,28 @@ export default {
       type: String,
       default: 'Введите значение'
     },
+    inputValue: {
+      type: String
+    },
     errorMessage: {
       type: String,
       default: 'Не правильно заполненные данные'
-    },
-    inputType: {
-      type: String,
-      default: 'text'
     },
     maxInputLength: {
       type: Number
     }
   },
-  data () {
-    return {
-      value: ''
-    }
-  },
   computed: {
     getInputLength () {
-      return this.value.length
+      return this.inputValue.length
     },
     isValid () {
-      return true
+      return !!this.errorMessage.length
+    }
+  },
+  methods: {
+    handleInput (event) {
+      this.$emit('updateInput', event.target.value)
     }
   }
 }

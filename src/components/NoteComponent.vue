@@ -1,38 +1,44 @@
 <template lang="pug">
-.note
+.note.text-normal
   .note-header
     .note-header__title
-      | Назавние заметки ывывывывыв
+      | {{ data.title }}
     .note-ear
       .note-ear__top
       .note-ear__bottom
 
   .note-body
-    p.note-text {{ cutText(noteText) }}
+    p.note-text {{ cutText(data.content) }}
   .note-footer
-    .note-btn(@click="deleteNote()")
+    .note-btn(@click="deleteNote(data.id)")
       Cross.note-btn__icon
       | Удалить
 </template>
 
 <script>
 import Cross from '@/assets/cross.svg'
-
+import { deleteOne } from '@/methods/notesApiMethods.js'
 export default {
   components: {
     Cross
   },
-  data () {
-    return {
-      noteText: 'sdfsdfsdfsdfs dfsdfsdfsdfsdfsdf sdfsdfsdfsdfsdfsdfsdfsdfsdf sdfsdfsdfsdfsd fsdfsdfsdfsdfsdfsdfsdfsdfsdfsdfsd fsdfsdfs dfsdfsdfsdfsdf sdfsdfsdfsdfs dfsdfsdfsdfsdfsdf sdfsdfsdfsdfsdfsdfsdfsdfsdf sdfsdfsdfsdfsd fsdfsdfsdfsdfsdfsdfsdfsdfsdfsdfsd fsdfsdfs dfsdfsdfsdfsdf'
+  props: {
+    data: {
+      type: Object,
+      required: true
     }
   },
+
   methods: {
-    cutText () {
-      return this.noteText.substring(0, 200) + '...'
+    cutText (content) {
+      if (content.length > 200) {
+        return content.substring(0, 200) + '...'
+      } else {
+        return content
+      }
     },
-    deleteNote () {
-      console.log('Deleted')
+    deleteNote (id) {
+      deleteOne(id)
     }
   }
 }
@@ -41,13 +47,10 @@ export default {
 <style lang="scss">
 .note {
   height: auto;
+  max-height: 480px;
   display: flex;
   flex-direction: column;
-  width: 320px;
-
-  font-size: 20px;
-  font-weight: 500;
-  line-height: 32px;
+  width: 100%;
 
   border-radius: 12px;
   overflow: hidden;
@@ -57,7 +60,7 @@ export default {
     height: 72px;
   }
   &-header__title{
-    width: 100%;
+    width: calc(100% - 40px);
     padding: 20px 28px;
     white-space: nowrap;
     overflow: hidden;
@@ -73,7 +76,7 @@ export default {
       position: absolute;
       background-color: var(--green);
       border-style: solid;
-      border-width: 30px 0 0 30px;
+      border-width: 40px 0 0 40px;
       border-radius: 0 0 0 8px;
       border-color: var(--dark) var(--green) var(--green) var(--green);
       position: absolute;
@@ -84,11 +87,14 @@ export default {
       position: absolute;
       height: 60px;
       width: 100%;
+      width: 40px;
+      min-width: 40px;
       background-color: var(--green-light);
       bottom: 0;
     }
   }
   &-body{
+    max-height: 342px;
     padding: 0 28px;
     background-color: var(--green-light);
   }
@@ -99,6 +105,7 @@ export default {
   &-footer {
     display: flex;
     padding: 20px 32px;
+    border-radius: 0 0 12px 12px;
     background-color: var(--green-light);
   }
   &-btn {

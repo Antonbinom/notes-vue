@@ -9,10 +9,12 @@
   },
   "dependencies": {
     "@fontsource/montserrat": "^5.0.15",
+    "axios": "^1.6.2",
     "core-js": "^3.8.3",
     "register-service-worker": "^1.7.2",
     "vue": "^2.6.14",
     "vue-router": "^3.5.1",
+    "vuelidate": "^0.7.7",
     "vuex": "^3.6.2"
   },
   "devDependencies": {
@@ -31,6 +33,7 @@
     "eslint-plugin-promise": "^5.1.0",
     "eslint-plugin-vue": "^8.0.3",
     "file-loader": "^6.2.0",
+    "portal-vue": "^3.0.0",
     "pug": "^3.0.2",
     "pug-plain-loader": "^1.1.0",
     "sass": "^1.32.7",

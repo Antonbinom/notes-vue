@@ -1,7 +1,7 @@
 <template lang="pug">
 .logout
   .logout-tail
-  button.logout-btn(@click="$emit('logout')") Выйти
+  button.logout-btn.text-small-bold(@click="$emit('action')") Выйти
 </template>
 
 <style lang="scss">
@@ -22,10 +22,6 @@
   &-btn {
     padding: 40px;
 
-    font-size: 18px;
-    font-style: normal;
-    font-weight: 700;
-    line-height: 28px;
     color: var(--green-light);
 
     border: none;

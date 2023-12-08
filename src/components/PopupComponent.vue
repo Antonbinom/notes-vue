@@ -1,45 +1,84 @@
 <template lang="pug">
-.popup
-  .btn-close
-    Cross
-  slot(name="header")
-  slot(name="main")
-  slot(name="footer")
-
+.popup(
+  v-if="isPopupOpen"
+  @click="close"
+  )
+  .popup-content
+    Btn(@action="close").popup-close
+    slot(name="header")
+    slot(name="main")
+    slot(name="footer")
 </template>
 
 <script>
-import Cross from '@/assets/cross.svg'
+import Btn from '@/components/RoundBtnComponent.vue'
 
 export default {
   components: {
-    Cross
+    Btn
+  },
+  computed: {
+    isPopupOpen () {
+      return this.$store.getters.getIsPopupOpen.isOpen
+    }
+  },
+  methods: {
+    close ({ target }) {
+      if (target.classList.contains('popup') || target.closest('.popup-close')) {
+        this.$store.dispatch('setIsPopupOpen', { status: false, type: null })
+      }
+    }
   }
 }
 </script>
 
 <style lang="scss">
 .popup {
-  position: relative;
-  max-width: 780px;
-  height: auto;
-  padding: 80px;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
   background: rgba(var(--dark-middle-rgba), 0.7);
-
-  border-radius: 40px;
-}
-.btn-close {
-  position: absolute;
   display: flex;
-  align-items: center;
   justify-content: center;
-  width: 56px;
-  height: 56px;
-  background-color: var(--green-light);
-  border-radius: 50%;
-  cursor: pointer;
+  align-items: center;
+  z-index: 1000;
+  &-content {
+    position: relative;
+    max-width: 780px;
+    width: 100%;
+    height: auto;
+    padding: 80px;
+    background: var(--dark-middle);
 
-  top: 20px;
-  right: 20px;
+    border-radius: 40px;
+  }
+
+  &-close {
+    top: 20px;
+    right: 20px;
+  }
 }
+
+.footer {
+  &-login {
+    display: flex;
+    align-items: center;
+  }
+  &-text {
+    margin-right: 4px;
+    color: var(--gray);
+  }
+  &-btn {
+    margin-left: auto;
+  }
+  &-message {
+    margin-top: 20px;
+    padding: 8px 20px;
+    color: var(--red);
+    background-color: rgba(var(--red-rgba), 0.1);
+    border-radius: 24px;
+  }
+  }
 </style>

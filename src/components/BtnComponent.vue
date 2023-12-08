@@ -1,5 +1,5 @@
 <template lang="pug">
-button.btn
+button.btn.text-normal(@click="$emit('action')")
   slot
 </template>
 
@@ -10,10 +10,6 @@ button.btn
   height: 56px;
   padding: 12px 24px;
 
-  font-size: 20px;
-  font-style: normal;
-  font-weight: 500;
-  line-height: 32px;
   color: #FFFFFF;
 
   border: none;

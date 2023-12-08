@@ -1,17 +1,18 @@
 <template lang="pug">
-.input
+.input.text-small
   span.input-title {{ title}}
   .input-wrapper
-    input.input-field(
-      v-model="value"
+    input.input-field.text-small(
+      :value="inputValue.trim()"
+      @input="handleInput"
       :maxlength="maxInputLength"
       :type="getInputType"
       :placeholder="placeholder"
       )
     EyeOn(@click="toggleShowPassword(true)").input-icon.eye-on(v-if="inputType==='password' && !isVisible")
     EyeOff(@click="toggleShowPassword(false)").input-icon.eye-off(v-if="inputType==='password' && isVisible")
-  div.input-bottom(v-if="maxInputLength || !isValid")
-    span.input-error(v-if="!isValid") {{ errorMessage }}
+  div.input-bottom(v-if="maxInputLength || errorMessage")
+    span.input-error(v-if="errorMessage") {{ errorMessage }}
     span.input-counter(v-if="maxInputLength") {{getInputLength}}/{{ maxInputLength }}
 </template>
 
@@ -28,6 +29,9 @@ export default {
     placeholder: {
       type: String,
       default: 'Введите значение'
+    },
+    inputValue: {
+      type: String
     },
     errorMessage: {
       type: String,
@@ -47,7 +51,6 @@ export default {
   },
   data () {
     return {
-      value: '',
       isVisible: false
     }
   },
@@ -58,15 +61,15 @@ export default {
         : 'text'
     },
     getInputLength () {
-      return this.value.length
-    },
-    isValid () {
-      return true
+      return this.inputValue.length
     }
   },
   methods: {
     toggleShowPassword (value) {
       this.isVisible = value
+    },
+    handleInput (event) {
+      this.$emit('updateInput', event.target.value)
     }
   }
 }
@@ -77,11 +80,6 @@ export default {
   display: flex;
   flex-direction: column;
   width: inherit;
-
-  font-size: 18px;
-  font-style: normal;
-  font-weight: 400;
-  line-height: 28px;
 
   &-title {
     margin-bottom: 8px;
@@ -100,10 +98,6 @@ export default {
     color: var(--dark);
 
     font-family: 'Montserrat' serif;
-    font-size: 18px;
-    font-style: normal;
-    font-weight: 400;
-    line-height: 28px;
 
     border: 2px solid transparent;
     border-radius: 36px;
@@ -145,6 +139,7 @@ export default {
   }
   &-counter {
     margin-left: auto;
+    color: var(--gray)
   }
 }
 </style>
