@@ -9,6 +9,8 @@
       slot(name="header")
       slot(name="main")
       slot(name="footer")
+      .spinner(v-if="$store.getters.getIsLoading")
+
 </template>
 
 <script>
@@ -41,6 +43,7 @@ export default {
   destroyed () {
     document.body.style.overflow = 'auto'
     document.body.style.paddingRight = ''
+    this.$store.dispatch('setIsLoading', false)
   }
 }
 </script>
@@ -112,6 +115,10 @@ export default {
       border-radius: 24px;
     }
     }
+  & .spinner {
+    margin-top: 20px;
+    margin-inline: auto;
+  }
 }
 @media(max-width: 1365px){
   .popup-content {

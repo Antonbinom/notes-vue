@@ -154,7 +154,6 @@ export default {
   },
   methods: {
     openPopup (popup, type) {
-      console.log(111111)
       this.$store.dispatch('setIsPopupOpen', { status: true, type })
       this.resetPopupFields(popup)
       this.resetPopupErrors(popup)
@@ -195,12 +194,15 @@ export default {
 
         this.resetPopupErrors('registration')
 
+        this.$store.dispatch('setIsLoading', true)
         await registration(data)
+        this.$store.dispatch('setIsLoading', false)
 
         this.$store.dispatch('setIsPopupOpen', { status: false, type: null })
         this.$router.push('/notes')
       } catch (error) {
         this.registration.errorMessage = error.response.data.message
+        this.$store.dispatch('setIsLoading', false)
       }
     },
     async toLogin () {
@@ -218,19 +220,20 @@ export default {
           return
         }
         this.resetPopupErrors('login')
-
+        this.$store.dispatch('setIsLoading', true)
         await login(data)
-
+        this.$store.dispatch('setIsLoading', false)
         this.$store.dispatch('setIsPopupOpen', { status: false, type: null })
         this.$router.push('/notes')
       } catch (error) {
         const errorMessage = error.response.data.message
         this.login.errorMessage = Array.isArray(errorMessage) ? errorMessage[0] : errorMessage
+        this.$store.dispatch('setIsLoading', false)
       }
     }
   },
-  mounted () {
-    auth()
+  async mounted () {
+    await auth()
   }
 }
 </script>
@@ -261,7 +264,7 @@ export default {
   }
 
 @media(max-width: 1365px){
-    .main {
+  .main {
     &-info {
       padding-block: 106px;
       margin-right: 30px;
@@ -276,29 +279,29 @@ export default {
 }
 
 @media(max-width: 997px){
-    .main {
-      flex-direction: column;
-      align-items: center;
-    &-info {
-      text-align: center;
-      align-items: center;
-      padding-top: 20px;
-      padding-bottom: 0px;
-      margin-right: 0px;
-    }
-    &-title {
-      margin-bottom: 20px;
-    }
-    &-subtitle {
-      width: 688px;
-    }
-    &-img {
-      width: calc(100% - 126px)
-    }
+  .main {
+    flex-direction: column;
+    align-items: center;
+  &-info {
+    text-align: center;
+    align-items: center;
+    padding-top: 20px;
+    padding-bottom: 0px;
+    margin-right: 0px;
+  }
+  &-title {
+    margin-bottom: 20px;
+  }
+  &-subtitle {
+    width: 688px;
+  }
+  &-img {
+    width: calc(100% - 126px)
   }
 }
+}
 @media(max-width: 767px){
-    .main {
+  .main {
     &-info {
       padding-top: 20px;
       padding-bottom: 0px;

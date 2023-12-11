@@ -17,6 +17,14 @@ p {
   margin: 0;
 }
 
+button:focus,
+button:active,
+a:focus,
+a:active {
+  outline: none;
+  background-color: transparent;
+}
+
 .h1 {
   font-size: 104px;
   font-style: normal;
@@ -64,4 +72,13 @@ p {
   font-style: normal;
   font-weight: 700;
   line-height: 28px;
+}
+
+.spinner {
+  border: 8px solid var(--white);
+  border-top: 8px solid var(--green-light);
+  border-radius: 50%;
+  width: 50px;
+  height: 50px;
+  animation: spin 1s linear infinite;
 }

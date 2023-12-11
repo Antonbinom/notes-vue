@@ -136,8 +136,9 @@ export default {
         }
 
         this.resetPopupErrors('note')
-
+        this.$store.dispatch('setIsLoading', true)
         await addNew(note)
+        this.$store.dispatch('setIsLoading', false)
 
         this.$store.dispatch('setIsPopupOpen', { status: false, type: null })
         this.updateInputValue('', 0, 'note')
@@ -145,11 +146,12 @@ export default {
       } catch (error) {
         const errors = error.response.data.message
         this.note.errorMessage = errors
+        this.$store.dispatch('setIsLoading', false)
       }
     }
   },
-  mounted () {
-    getAll()
+  async mounted () {
+    await getAll()
   }
 }
 </script>
