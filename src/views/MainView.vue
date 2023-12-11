@@ -176,7 +176,7 @@ export default {
     async toRegistration () {
       const [email, password, secondPassword] = this.registration.inputs
       const data = {
-        email: email.value,
+        email: email.value.toLowerCase(),
         password: password.value,
         confirm_password: secondPassword.value
       }
@@ -208,7 +208,7 @@ export default {
     async toLogin () {
       const [email, password] = this.login.inputs
       const data = {
-        email: email.value,
+        email: email.value.toLowerCase(),
         password: password.value
       }
       const emailError = inputValidation('email', email.value)
