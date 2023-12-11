@@ -46,10 +46,10 @@ export default {
 
 <style lang="scss">
 .note {
-  height: auto;
-  max-height: 480px;
   display: flex;
   flex-direction: column;
+  height: auto;
+  max-height: 480px;
   width: 100%;
 
   border-radius: 12px;
@@ -57,14 +57,12 @@ export default {
 
   &-header{
     display: flex;
-    height: 72px;
   }
   &-header__title{
     width: calc(100% - 40px);
     padding: 20px 28px;
-    white-space: nowrap;
+    overflow-wrap: break-word;
     overflow: hidden;
-    text-overflow: ellipsis;
     font-weight: 600;
     background-color: var(--green-light);
 
@@ -85,8 +83,7 @@ export default {
     }
     &__bottom {
       position: absolute;
-      height: 60px;
-      width: 100%;
+      height: calc(100% - 30px);
       width: 40px;
       min-width: 40px;
       background-color: var(--green-light);
@@ -95,7 +92,8 @@ export default {
   }
   &-body{
     max-height: 342px;
-    padding: 0 28px;
+    padding: 20px 28px 28px;
+
     background-color: var(--green-light);
   }
   .note-text {

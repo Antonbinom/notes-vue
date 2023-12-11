@@ -1,10 +1,17 @@
 <template lang="pug">
 div.main
-  Popup(v-if="isPopupOpen.type==='login' && !isAuth")
+  .main-info
+    h1.main-title.h1 Мои заметки
+    p.main-subtitle.h3 Не забывай о важном, храни его в облаке.
+  img.main-img(src="@/assets/main.png")
+  Popup(
+    v-if="isPopupOpen.type==='login' && !isAuth"
+    @close-popup="resetPopupFields(login.name); resetPopupErrors(login.name)"
+    )
     template(v-slot:header)
-      h1 {{ login.title }}
+      h2.popup-title.h2  {{ login.title }}
     template(v-slot:main)
-      Input(
+      Input.popup-input(
         v-for="(input, index) in login.inputs"
         :key="input.title"
         @updateInput="updateInputValue($event, index, 'login')"
@@ -15,20 +22,24 @@ div.main
         :error-message="input.error"
         )
     template(v-slot:footer)
-      .footer-login
-        span.footer-text.text-small {{ login.question }}
-        LinkBtn.footer-link(@action="openPopup(login.name, login.popupLink )")
-          | {{ login.popupLinkName }}
-        Btn.footer-btn(@action="login.method")
-          |{{ login.button }}
-      .footer-message.text-small(v-if="login.errorMessage")
-        span {{ login.errorMessage }}
+      .popup-footer
+        .popup-footer__login
+          .popup-footer__login-left
+            span.popup-footer__text.text-small {{ login.question }}
+            LinkBtn.popup-footer__link(@action="openPopup(login.name, login.popupLink )")
+              | {{ login.popupLinkName }}
+          Btn.popup-footer__btn(@action="login.method")
+            |{{ login.button }}
+        .popup-footer__message.text-small(v-if="login.errorMessage")
+          span {{ login.errorMessage }}
 
-  Popup(v-if="isPopupOpen.type==='registration' && !isAuth")
+  Popup(
+    v-if="isPopupOpen.type==='registration' && !isAuth"
+    @close-popup="resetPopupFields(registration.name); resetPopupErrors(registration.name)")
     template(v-slot:header)
-      h1 {{ registration.title }}
+      h2.popup-title.h2 {{ registration.title }}
     template(v-slot:main)
-      Input(
+      Input.popup-input(
         v-for="(input, index) in registration.inputs"
         :key="input.title"
         @updateInput="updateInputValue($event, index, 'registration')"
@@ -39,14 +50,16 @@ div.main
         :error-message="input.error"
         )
     template(v-slot:footer)
-      .footer-login
-        span.footer-text.text-small {{ registration.question }}
-        LinkBtn.footer-link(@action="openPopup(registration.name, registration.popupLink)")
-          | {{ registration.popupLinkName }}
-        Btn.footer-btn(@action="toRegistration")
-          |{{ registration.button }}
-      .footer-message.text-small(v-if="registration.errorMessage")
-        span {{ registration.errorMessage }}
+      .popup-footer
+        .popup-footer__login
+          .popup-footer__login-left
+            span.popup-footer__text.text-small {{ registration.question }}
+            LinkBtn.popup-footer__link(@action="openPopup(registration.name, registration.popupLink)")
+              | {{ registration.popupLinkName }}
+          Btn.popup-footer__btn(@action="toRegistration")
+            |{{ registration.button }}
+        .popup-footer__message.text-small(v-if="registration.errorMessage")
+          span {{ registration.errorMessage }}
 </template>
 
 <script>
@@ -57,7 +70,6 @@ import TextArea from '@/components/TextAreaComponent.vue'
 import Popup from '@/components/PopupComponent.vue'
 import { registration, login, auth } from '@/methods/userApiMethods.js'
 
-import { required, minLength } from 'vuelidate/lib/validators'
 import inputValidation from '@/methods/inputValidation.js'
 export default {
   data () {
@@ -72,8 +84,7 @@ export default {
             type: 'text',
             value: '',
             isValid: true,
-            error: '',
-            validation: { required, minLength: minLength(4) }
+            error: ''
           },
           {
             title: 'Пароль',
@@ -142,6 +153,12 @@ export default {
     }
   },
   methods: {
+    openPopup (popup, type) {
+      console.log(111111)
+      this.$store.dispatch('setIsPopupOpen', { status: true, type })
+      this.resetPopupFields(popup)
+      this.resetPopupErrors(popup)
+    },
     resetPopupFields (popup) {
       this[popup].inputs.forEach(input => {
         input.value = ''
@@ -153,11 +170,10 @@ export default {
       })
       this[popup].errorMessage = ''
     },
-    openPopup (popup, type) {
-      this.$store.dispatch('setIsPopupOpen', { status: true, type })
-      this.resetPopupFields(popup)
-      this.resetPopupErrors(popup)
+    updateInputValue (value, index, name) {
+      this[name].inputs[index].value = value
     },
+
     async toRegistration () {
       const [email, password, secondPassword] = this.registration.inputs
       const data = {
@@ -208,11 +224,9 @@ export default {
         this.$store.dispatch('setIsPopupOpen', { status: false, type: null })
         this.$router.push('/notes')
       } catch (error) {
-        this.login.errorMessage = error.response.data.message
+        const errorMessage = error.response.data.message
+        this.login.errorMessage = Array.isArray(errorMessage) ? errorMessage[0] : errorMessage
       }
-    },
-    updateInputValue (value, index, name) {
-      this[name].inputs[index].value = value
     }
   },
   mounted () {
@@ -220,3 +234,91 @@ export default {
   }
 }
 </script>
+
+<style lang="scss">
+  .main {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    &-info {
+      display: flex;
+      flex-direction: column;
+      padding-block: 236px;
+    }
+    &-title {
+      width: 448px;
+      margin-bottom: 40px;
+    }
+    &-subtitle {
+      width: 394px;
+      color: var(--gray)
+    }
+    &-img {
+      width: 60%;
+      max-width: 897px;
+      height: fit-content;
+    }
+  }
+
+@media(max-width: 1365px){
+    .main {
+    &-info {
+      padding-block: 106px;
+      margin-right: 30px;
+    }
+    &-title {
+      margin-bottom: 40px;
+    }
+    &-img {
+      width: 50%;
+    }
+  }
+}
+
+@media(max-width: 997px){
+    .main {
+      flex-direction: column;
+      align-items: center;
+    &-info {
+      text-align: center;
+      align-items: center;
+      padding-top: 20px;
+      padding-bottom: 0px;
+      margin-right: 0px;
+    }
+    &-title {
+      margin-bottom: 20px;
+    }
+    &-subtitle {
+      width: 688px;
+    }
+    &-img {
+      width: calc(100% - 126px)
+    }
+  }
+}
+@media(max-width: 767px){
+    .main {
+    &-info {
+      padding-top: 20px;
+      padding-bottom: 0px;
+      margin-right: 0px;
+    }
+    &-title {
+      width: 320px;
+      margin-bottom: 20px;
+      font-size: 60px;
+      line-height: 64px;
+    }
+    &-subtitle {
+      width: auto;
+      margin-bottom: 17px;
+      font-size: 24px;
+      line-height: 36px;
+    }
+    &-img {
+      width: 100%
+    }
+  }
+}
+</style>

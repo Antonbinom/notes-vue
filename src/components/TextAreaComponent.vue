@@ -54,12 +54,20 @@ export default {
 <style lang="scss" scoped>
 .input {
   &-field {
-    min-height: 260px;
+    min-height: 212px;
     padding: 16px 28px;
     resize: none;
   }
   &-bottom {
     margin-top: 0;
   }
+}
+
+@media(max-width: 1365px){
+  .input {
+  &-field {
+    min-height: 136px;
+  }
+}
 }
 </style>

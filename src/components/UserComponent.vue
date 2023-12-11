@@ -1,8 +1,8 @@
 <template lang="pug">
 .user.text-small
   span.user-name {{ userName }}
-  .user-avatar
-    Icon(@click="isLogoutVisible = !isLogoutVisible")
+  .user-avatar(@click="isLogoutVisible = !isLogoutVisible")
+    Icon.user-avatar__icon
   Logout.user-logout(
     v-if="isLogoutVisible"
     @action="onLogout()"
@@ -33,7 +33,18 @@ export default {
       this.isLogoutVisible = !this.isLogoutVisible
       logout()
       this.$router.push('/')
+    },
+    handleOutsideClick (e) {
+      if (this.isLogoutVisible && !e.target.classList.contains('logout-btn') && !e.target.closest('.user-avatar')) {
+        this.isLogoutVisible = false
+      }
     }
+  },
+  mounted () {
+    document.addEventListener('click', this.handleOutsideClick)
+  },
+  destroyed () {
+    document.removeEventListener('click', this.handleOutsideClick)
   }
 }
 </script>
@@ -46,6 +57,10 @@ export default {
 
   &-name {
     margin-right: 12px;
+    max-width: 215px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
   }
   &-avatar {
     display: flex;
@@ -58,6 +73,11 @@ export default {
     background-color: var(--dark-middle);
 
     cursor: pointer;
+
+    &__icon {
+      width: 22px;
+      height: 28px;
+    }
   }
   &-logout {
     position: absolute;
@@ -65,5 +85,16 @@ export default {
     right: 0;
     z-index: 20;
   }
+}
+
+@media(max-width: 767px) {
+  .user-avatar {
+    width: 36px;
+    height: 36px;
+  &__icon {
+    width: 13px;
+    height: 18px;
+  }
+}
 }
 </style>

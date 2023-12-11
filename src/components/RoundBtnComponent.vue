@@ -15,7 +15,6 @@ export default {
 
 <style lang="scss" scoped>
 .round-btn {
-  position: absolute;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -28,17 +27,17 @@ export default {
   cursor: pointer;
 
   &:hover {
-  background-color: #97AB0D;
+  background-color: var(--green-middle);
   transition: background-color ease .2s;
   }
 
   &:active {
-    background-color: #819400;
+    background-color: var(--green-dark);
     transition: background-color ease .2s;
   }
 
   &:disabled {
-    background-color: #9DA5AF;
+    background-color: var(--gray);
     cursor:not-allowed;
   }
 }

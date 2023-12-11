@@ -1,12 +1,20 @@
 @import "./variables.scss";
-@import "@fontsource/montserrat/cyrillic.css";
-
 body {
   font-family: "Montserrat", sans-serif;
   background-color: var(--dark);
   color: var(--white);
   font-size: var(--font-size);
   /* Use the variables wherever needed */
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+p {
+  margin: 0;
 }
 
 .h1 {

@@ -20,17 +20,17 @@ button.btn.text-normal(@click="$emit('action')")
   transition: background-color ease .2s;
 
   &:hover {
-    background-color: #97AB0D;
-    transition: background-color ease .2s;
+  background-color: var(--green-middle);
+  transition: background-color ease .2s;
   }
 
   &:active {
-    background-color: #819400;
+    background-color: var(--green-dark);
     transition: background-color ease .2s;
   }
 
   &:disabled {
-    background-color: #9DA5AF;
+    background-color: var(--gray);
     cursor:not-allowed;
   }
 }

@@ -1,35 +1,20 @@
 const inputValidation = (type, value) => {
-  if (type === 'email') {
-    if (value.length < 1) {
-      return 'E-Mail не может быть пустым'
-    }
-    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value)) {
-      return 'Невалидный адрес электронной почты'
-    }
-  } else if (type === 'password') {
-    if (value.length < 1) {
-      return 'Пароль не может быть пустым'
-    }
-    if (value.length < 4) {
-      return 'Пароль не может быть короче 4 символов'
-    }
-  } else if (type === 'confirm') {
-    if (value.length < 1) {
-      return 'Подтверждение пароля не может быть пустым'
-    }
-    if (value.length < 4) {
-      return 'Подтверждение пароля не может быть короче 4 символов'
-    }
-  } else if (type === 'title') {
-    if (value.length < 1) {
-      return 'Заголовок не может быть пустым'
-    }
-  } else if (type === 'content') {
-    if (value.length < 1) {
-      return 'Содержимое не может быть пустым'
-    }
+  const length = value.trim().length
+
+  switch (type) {
+    case 'email':
+      return length < 1 ? 'E-Mail не может быть пустым' : !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value) ? 'Невалидный адрес электронной почты' : ''
+    case 'password':
+      return length < 1 ? 'Пароль не может быть пустым' : length > 12 ? 'Пароль не может быть длиннее 12 символов' : length < 4 ? 'Пароль не может быть короче 4 символов' : ''
+    case 'confirm':
+      return length < 1 ? 'Подтверждение пароля не может быть пустым' : length < 4 ? 'Подтверждение пароля не может быть короче 4 символов' : ''
+    case 'title':
+      return length < 1 ? 'Заголовок не может быть пустым' : length > 64 ? 'Заголовок не может быть длиннее 64 символов' : ''
+    case 'content':
+      return length < 1 ? 'Содержимое не может быть пустым' : ''
+    default:
+      return ''
   }
-  return ''
 }
 
 export default inputValidation

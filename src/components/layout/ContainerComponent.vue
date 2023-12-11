@@ -8,25 +8,20 @@
 .container {
   width: auto;
   max-width: 1600px;
-  margin-left: auto;
-  margin-right: auto;
-
-  padding-left: 80px;
-  padding-right: 80px;
-
+  margin-inline: auto;
+  padding-inline: 80px;
 }
 
 @media(max-width: 991px) {
   .container {
-    padding-left: 40px;
-    padding-right: 40px;
+      padding-inline: 40px;
+
   }
 }
 
 @media(max-width: 767px) {
   .container {
-    padding-left: 20px;
-    padding-right: 20px;
+      padding-inline: 20px;
   }
 }
 </style>

@@ -7,11 +7,14 @@
     )
 
   AddBtn.notes-add(@action="openPopup()")
-  Popup(v-if="$store.getters.getIsPopupOpen.type==='note'")
+  Popup(
+    v-if="$store.getters.getIsPopupOpen.type==='note'"
+    @close-popup="resetPopupFields(note.name); resetPopupErrors(note.name)"
+    )
     template(v-slot:header)
-      h1 {{ note.title }}
+      h2.popup-title.h2 {{ note.title }}
     template(v-slot:main)
-      Input(
+      Input.popup-input(
         @updateInput="updateInputValue($event, 0, 'note')"
         :title="note.inputs[0].title"
         :placeholder="note.inputs[0].placeholder"
@@ -31,11 +34,12 @@
 
       )
     template(v-slot:footer)
-      .footer-login
-        Btn(@action="addNote()").footer-btn
-          |Добавить
-      .footer-message(v-if="note.errorMessage")
-        span {{note.errorMessage}}
+      .popup-footer
+        .popup-footer__login
+          Btn(@action="addNote()").popup-footer__btn
+            |Добавить
+        .popup-footer__message(v-if="note.errorMessage")
+          span {{note.errorMessage}}
 </template>
 
 <script>
@@ -47,6 +51,8 @@ import Popup from '@/components/PopupComponent.vue'
 import Input from '@/components/InputComponent.vue'
 import TextArea from '@/components/TextAreaComponent.vue'
 import { getAll, addNew } from '@/methods/notesApiMethods.js'
+import inputValidation from '@/methods/inputValidation.js'
+
 export default {
   components: {
     Container,
@@ -67,7 +73,7 @@ export default {
             title: 'Название заметки',
             placeholder: 'Введите название',
             type: 'text',
-            length: 100,
+            length: 64,
             value: '',
             error: ''
           },
@@ -96,22 +102,49 @@ export default {
   methods: {
     openPopup () {
       this.$store.dispatch('setIsPopupOpen', { status: true, type: 'note' })
+      this.resetPopupFields('note')
+      this.resetPopupErrors('note')
+    },
+    resetPopupFields (popup) {
+      this[popup].inputs.forEach(input => {
+        input.value = ''
+      })
+    },
+    resetPopupErrors (popup) {
+      this[popup].inputs.forEach(input => {
+        input.error = ''
+      })
+      this[popup].errorMessage = ''
     },
     updateInputValue (value, index, name) {
       this[name].inputs[index].value = value
     },
+
     async addNote () {
-      const title = this.note.inputs[0].value
-      const content = this.note.inputs[1].value
-      const note = { title, content }
+      const [title, content] = this.note.inputs
+
+      const note = { title: title.value, content: content.value }
+
+      const titleError = inputValidation('title', title.value)
+      const contentError = inputValidation('content', content.value)
+
       try {
+        if (titleError || contentError) {
+          this.note.inputs[0].error = titleError
+          this.note.inputs[1].error = contentError
+          return
+        }
+
+        this.resetPopupErrors('note')
+
         await addNew(note)
+
         this.$store.dispatch('setIsPopupOpen', { status: false, type: null })
         this.updateInputValue('', 0, 'note')
         this.updateInputValue('', 1, 'note')
       } catch (error) {
         const errors = error.response.data.message
-        console.log(errors)
+        this.note.errorMessage = errors
       }
     }
   },
@@ -134,7 +167,7 @@ export default {
   scrollbar-width: none;
 
   &-add {
-    position: absolute;
+    position: fixed;
     bottom: 40px;
     right: 12px;
     transform: rotateZ(45deg);

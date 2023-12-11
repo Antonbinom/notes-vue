@@ -3,7 +3,7 @@
   span.input-title {{ title}}
   .input-wrapper
     input.input-field.text-small(
-      :value="inputValue.trim()"
+      :value="inputValue"
       @input="handleInput"
       :maxlength="maxInputLength"
       :type="getInputType"
@@ -83,7 +83,7 @@ export default {
 
   &-title {
     margin-bottom: 8px;
-    padding: 0 24px;
+    padding-inline: 24px;
     color: var(--gray);
   }
   &-wrapper {
@@ -93,11 +93,13 @@ export default {
   &-field {
     max-height: 72px;
     max-width: 100%;
+    width: fill-available;
     width: -webkit-fill-available;
-    padding: 22px 60px;
+    width: -moz-available;;
+    padding: 22px 28px;
     color: var(--dark);
 
-    font-family: 'Montserrat' serif;
+    font-family: 'Montserrat' sans-serif;
 
     border: 2px solid transparent;
     border-radius: 36px;
@@ -107,7 +109,7 @@ export default {
     transition: border-color ease 0.2s;
 
     &::placeholder {
-      color: var(--gray)
+      color: var(--gray);
     }
     &:hover, &:focus {
       border-color: var(--green-light);
@@ -130,7 +132,7 @@ export default {
   &-bottom {
     display: flex;
     justify-content: space-between;
-    padding: 0 24px;
+    padding-inline: 24px;
     margin-top: 8px;
 
   }
