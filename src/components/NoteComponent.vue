@@ -91,6 +91,7 @@ export default {
     }
   }
   &-body{
+    border-top: 1px solid var(--green);
     max-height: 342px;
     padding: 20px 28px 28px;
 
